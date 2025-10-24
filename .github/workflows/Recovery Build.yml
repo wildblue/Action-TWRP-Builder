@@ -11,8 +11,8 @@ on:
       MANIFEST_BRANCH:
         description: 'MANIFEST_BRANCH'
         required: true
-        default: 'android-12.1'   'android-16'
-               # 'twrp-12.1'      'twrp-14.1'
+        default: 'android-16'   # 'android-12.1'
+               # 'twrp-12.1'    # 'twrp-14.1'
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
