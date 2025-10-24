@@ -6,8 +6,8 @@ on:
       MANIFEST_URL:
         description: 'MANIFEST_URL (if want to use SSH keys, use git@github.com:XXXXX)'
         required: true
-        default: 'https://github.com/omnirom/android'
-              # 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp'
+        default: 'git@github.com:omnirom/android'
+               # 'git@github.com:minimal/manifest-twrp/platform_manifest_twrp_aosp'
       MANIFEST_BRANCH:
         description: 'MANIFEST_BRANCH'
         required: true
@@ -16,8 +16,8 @@ on:
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/sailinggalaxians/android_device_samsung_xcoverpro'
-               # 'https://github.com/TeamWin/android_device_asus_I003D'
+        default: 'git@github.com:sailinggalaxians/android_device_samsung_xcoverpro'
+               # 'git@github.com:TeamWin/android_device_asus_I003D'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
