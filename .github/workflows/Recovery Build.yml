@@ -6,17 +6,20 @@ on:
       MANIFEST_URL:
         description: 'MANIFEST_URL (if want to use SSH keys, use git@github.com:XXXXX)'
         required: true
-        default: 'http://github.com/omnirom/android'
+        default: 'http://github.com/wildblue/android-manifest'
+               # 'http://github.com/omnirom/android'
                # 'http://github.com/minimal/manifest-twrp/platform_manifest_twrp_aosp'
       MANIFEST_BRANCH:
         description: 'MANIFEST_BRANCH'
         required: true
-        default: 'android-16'   # 'android-12.1'
+        default: 'android-16'
+               # 'android-16'   # 'android-12.1'
                # 'twrp-12.1'    # 'twrp-14.1'
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'http://github.com/sailinggalaxians/android_device_samsung_xcoverpro'
+        default: 'http://github.com/wildblue/android_device_samsung_xcoverpro'
+               # 'http://github.com/sailinggalaxians/android_device_samsung_xcoverpro'
                # 'http://github.com/teamwin/android_device_asus_i003d'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
