@@ -1,8 +1,4 @@
-name: Recovery Build
-
-concurrency:
-  group: ${{ github.ref }}
-  cancel-in-progress: true
+name: TWRP-Recovery Build
 
 on: #[push, pull_request, workflow_dispatch]
   workflow_call:
@@ -91,6 +87,10 @@ jobs:
       - name: Print the input tag to STDOUT
         run: echo  The tags are ${{ inputs.tags }}
   build:
+    concurrency:
+      group: ${{ github.ref }}
+      cancel-in-progress: true
+
     if: github.event.repository.owner.id == github.event.sender.id
     runs-on: ubuntu-latest
     permissions:
