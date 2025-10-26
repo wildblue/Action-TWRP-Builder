@@ -12,15 +12,6 @@ on: #[push, pull_request, workflow_dispatch]
     branches: [ "main" ]
   workflow_dispatch:
     inputs:
-      LOGLEVEL:
-        description: 'LOGLEVEL (Selects the ammount of logging)'
-        required: true
-        default: 'warning'
-        type: choice
-        options:
-          - info
-          - warning
-          - debug
       MANIFEST_URL:
         description: 'MANIFEST_URL (if want to use SSH keys, use git@github.com:XXXXX)'
         required: true
@@ -99,7 +90,6 @@ jobs:
     - name: Display Run Parameters
       run: |
         echo "::group::User Environment Variables"
-        echo "Log level: ${{ github.event.inputs.LOGLEVEL }}"
         echo "Manifest URL: ${{ github.event.inputs.MANIFEST_URL }}"
         echo "Manifest Branch: ${{ github.event.inputs.MANIFEST_BRANCH }}"
         echo "Device Tree URL: ${{ github.event.inputs.DEVICE_TREE_URL }}"
