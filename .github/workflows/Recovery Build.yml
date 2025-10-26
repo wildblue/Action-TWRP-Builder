@@ -77,7 +77,7 @@ jobs:
       uses: haya14busa/action-cond@v1
       id: buildtree
       with:
-        cond: startsWith(env.MANIFEST_BRANCH, 'twrp') || env.MANIFEST_URL == "Android-16"
+        cond: startsWith(env.MANIFEST_BRANCH, 'twrp') || env.MANIFEST_URL == "android-16"
         if_true: twrp
         if_false: omni
 
@@ -96,7 +96,7 @@ jobs:
         echo "Makefile Name:      ${{ env.MAKEFILE_NAME }}"
         echo "Build Target:       ${{ env.BUILD_TARGET }}.img"
         echo "Build Tree:         ${{ steps.buildtree.outputs.value }}"
-        echo "::endgroup::"
+        #echo "::endgroup::"
 
     # You might want to Checkout your repo first, but not mandatory
     - name: Check Out
