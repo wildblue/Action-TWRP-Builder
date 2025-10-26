@@ -95,7 +95,7 @@ jobs:
         echo "Device Name:        ${{ env.DEVICE_NAME }}"
         echo "Makefile Name:      ${{ env.MAKEFILE_NAME }}"
         echo "Build Target:       ${{ env.BUILD_TARGET }}.img"
-        echo "Build Tree:         ${{ steps.buildtree.outputs.value }}
+        echo "Build Tree:         ${{ steps.buildtree.outputs.value }}"
         echo "::endgroup::"
 
     # You might want to Checkout your repo first, but not mandatory
