@@ -77,7 +77,7 @@ jobs:
       uses: haya14busa/action-cond@v1
       id: buildtree
       with:
-        cond: startsWith(env.MANIFEST_BRANCH, 'twrp')
+        cond: startsWith(env.MANIFEST_BRANCH, 'twrp') || env.MANIFEST_URL == "Android-16"
         if_true: twrp
         if_false: omni
 
