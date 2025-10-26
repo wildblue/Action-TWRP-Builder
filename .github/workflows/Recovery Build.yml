@@ -26,16 +26,16 @@ on:
         required: true
         default: 'lineage-18.1'
                # 'android-12.1'
-      DEVICE_PATH:
-        description: 'DEVICE_PATH'
+      DEVICE_TREE_PATH:
+        description: 'DEVICE_TREE_PATH'
         required: true
         default: 'device/samsung/xcoverpro'
                # 'device/asus/I003D'
       COMMON_TREE_URL:
         description: 'COMMON_TREE_URL (if no common tree, leave blank)'
         required: false
-      COMMON_PATH:
-        description: 'COMMON_PATH (if no common tree, leave blank)'
+      COMMON_TREE_PATH:
+        description: 'COMMON_TREE_PATH (if no common tree, leave blank)'
         required: false
       DEVICE_NAME:
         description: 'DEVICE_NAME'
@@ -58,18 +58,43 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
+    env:
+      MANIFEST_URL: ${{ github.event.inputs.MANIFEST_URL }}
+      MANIFEST_BRANCH: ${{ github.event.inputs.MANIFEST_BRANCH }}
+      DEVICE_TREE_URL: ${{ github.event.inputs.DEVICE_TREE_URL }}
+      DEVICE_TREE_BRANCH: ${{ github.event.inputs.DEVICE_TREE_BRANCH }}
+      DEVICE_TREE_PATH: ${{ github.event.inputs.DEVICE_TREE_PATH }}
+      COMMON_TREE_URL: ${{ github.event.inputs.COMMON_TREE_URL }}
+      COMMON_TREE_BRANCH: ${{ github.event.inputs.DEVICE_TREE_BRANCH }}
+      COMMON_TREE_PATH: ${{ github.event.inputs.COMMON_TREE_PATH }}
+      DEVICE_NAME: ${{ github.event.inputs.DEVICE_NAME }}
+      MAKEFILE_NAME: ${{ github.event.inputs.MAKEFILE_NAME }}
+      BUILD_TARGET: ${{ github.event.inputs.BUILD_TARGET }}.img
+     
     steps:
-    - name: Display Run Parameters
+
+    - name: Check Build Tree
+      uses: haya14busa/action-cond@v1
+      id: buildtree
+      with:
+        cond: startsWith(env.MANIFEST_BRANCH, 'twrp')
+        if_true: twrp
+        if_false: omni
+
+    - name: Display Runtime-Parameters
       run: |
         echo "::group::User Environment Variables"
-        echo "Manifest URL: ${{ github.event.inputs.MANIFEST_URL }}"
-        echo "Manifest Branch: ${{ github.event.inputs.MANIFEST_BRANCH }}"
-        echo "Device Tree URL: ${{ github.event.inputs.DEVICE_TREE_URL }}"
-        echo "Device Tree Branch: ${{ github.event.inputs.DEVICE_TREE_BRANCH }}"
-        echo "Device Path: ${{ github.event.inputs.DEVICE_PATH }}"
-        echo "Device Name: ${{ github.event.inputs.DEVICE_NAME }}"
-        echo "Makefile Name: ${{ github.event.inputs.MAKEFILE_NAME }}"
-        echo "Build Target: ${{ github.event.inputs.BUILD_TARGET }}.img"
+        echo "Manifest URL:       ${{ env.MANIFEST_URL }}"
+        echo "Manifest Branch:    ${{ env.MANIFEST_BRANCH }}"
+        echo "Device Tree URL:    ${{ env.DEVICE_TREE_URL }}"
+        echo "Device Tree Branch: ${{ env.DEVICE_TREE_BRANCH }}"
+        echo "Device Tree Path:   ${{ env.DEVICE_TREE_PATH }}"
+        echo "Common Tree URL:    ${{ env.COMMON_TREE_URL }}"
+        echo "Common Tree Branch: ${{ env.COMMON_TREE_BRANCH }}"
+        echo "Common Tree Path:   ${{ env.COMMON_TREE_PATH }}"
+        echo "Device Name:        ${{ env.DEVICE_NAME }}"
+        echo "Makefile Name:      ${{ env.MAKEFILE_NAME }}"
+        echo "Build Target:       ${{ env.BUILD_TARGET }}.img"
         echo "::endgroup::"
 
     # You might want to Checkout your repo first, but not mandatory
@@ -99,9 +124,10 @@ jobs:
         java-version: '11'
 
     - name: Setup SSH Keys
-      if: ${{ startsWith(github.event.inputs.MANIFEST_URL, 'git@github.com') || 
-          startsWith(github.event.inputs.DEVICE_TREE_URL, 'git@github.com') ||
-          startsWith(github.event.inputs.COMMON_TREE_URL, 'git@github.com') }}
+      if: |
+        ${{ startsWith(github.event.inputs.MANIFEST_URL, 'git@github.com') || 
+        startsWith(github.event.inputs.DEVICE_TREE_URL, 'git@github.com') ||
+        startsWith(env.COMMON_TREE_URL, 'git@github.com') }}
       uses: webfactory/ssh-agent@v0.9.0
       with:
           ssh-private-key: |
@@ -139,16 +165,8 @@ jobs:
         github.event.inputs.COMMON_TREE_URL != null
         && github.event.inputs.COMMON_PATH != null
       run: |
-        git clone ${{ github.event.inputs.COMMON_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.COMMON_PATH }}
+        git clone ${{ env.COMMON_TREE_URL }} -b ${{ env.COMMON_TREE_BRANCH }} ./${{ github.event.inputs.COMMON_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
-
-    - name: Check Build Tree
-      uses: haya14busa/action-cond@v1
-      id: buildtree
-      with:
-        cond: ${{ github.event.inputs.MANIFEST_BRANCH == 'twrp-11' || github.event.inputs.MANIFEST_BRANCH == 'twrp-12.1' }}
-        if_true: twrp
-        if_false: omni
 
     - name: Sync Device Dependencies
       run: |
