@@ -1,8 +1,8 @@
 name: Recovery Build
 
 on: [push, pull_request, workflow_dispatch]
-push:
-  branches: [ "main" ]
+  push:
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
     inputs:
