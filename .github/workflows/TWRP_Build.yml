@@ -1,31 +1,61 @@
 name: Recovery Build
 
-on: [push, pull_request, workflow_dispatch]
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+on: #[push, pull_request, workflow_dispatch]
+  workflow_call:
+    secrets:
+      access-token:
+        description: 'A token passed from the caller workflow'
+        required: false
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
     inputs:
+      LOGLEVEL:
+        description: 'LOGLEVEL (Selects the ammount of logging)'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
       MANIFEST_URL:
         description: 'MANIFEST_URL (if want to use SSH keys, use git@github.com:XXXXX)'
         required: true
-        default: 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp'
+        default: 'https://github.com/wildblue/android-manifest'
+               # 'https://github.com/omnirom/android'
+               # 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp'
       MANIFEST_BRANCH:
         description: 'MANIFEST_BRANCH'
         required: true
-        default: 'twrp-14'
+        default: 'android-16'
+               # 'android-16'   # 'android-12.1'
+               # 'twrp-14.1'    # 'twrp-12.1'
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/exynos-republic/android_device_samsung_o1s'
+        default: 'git@github.com:wildblue/android_device_samsung_xcoverpro'
+               # 'https://github.com/sailinggalaxians/android_device_samsung_xcoverpro'
+               # 'https://github.com/teamwin/android_device_asus_i003d'
+               # 'https://github.com/exynos-republic/android_device_samsung_o1s'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
-        default: 'fourteen'
+        default: 'lineage-18.1'
+               # 'lineage-12.1'
+               # 'android-16'
+               # 'fourteen'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
-        default: 'device/samsung/o1s'
+        default: 'device/samsung/xcoverpro'
+               # 'device/samsung/o1s'
       COMMON_TREE_URL:
         description: 'COMMON_TREE_URL'
         required: true
@@ -41,17 +71,25 @@ on: [push, pull_request, workflow_dispatch]
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
-        default: 'o1s'
+        default: 'GD715FD'
+               # 'O1S'
       MAKEFILE_NAME:
         description: 'MAKEFILE_NAME'
         required: true
-        default: 'twrp_o1s'
+        default: 'omni_xcoverpro.mk'
+               # 'twrp_o1s'
       BUILD_TARGET:
         description: 'BUILD_TARGET'
         required: true
         default: 'recovery'
 
 jobs:
+  print-tag:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.print_tags }} 
+    steps:
+      - name: Print the input tag to STDOUT
+        run: echo  The tags are ${{ inputs.tags }}
   build:
     if: github.event.repository.owner.id == github.event.sender.id
     runs-on: ubuntu-latest
@@ -61,6 +99,7 @@ jobs:
     - name: Display Run Parameters
       run: |
         echo "::group::User Environment Variables"
+        echo "Log level: ${{ LOGLEVEL}}"
         echo "Manifest URL: ${{ github.event.inputs.MANIFEST_URL }}"
         echo "Manifest Branch: ${{ github.event.inputs.MANIFEST_BRANCH }}"
         echo "Device Tree URL: ${{ github.event.inputs.DEVICE_TREE_URL }}"
@@ -183,6 +222,7 @@ jobs:
         body: |
           Manifest: ${{ github.event.inputs.MANIFEST_BRANCH }}
           Device: ${{ github.event.inputs.DEVICE_NAME }}
-          Target: ${{ github.event.inputs.BUILD_TARGET }}.img
+          Target: ${{ github.event.inputs.BUILD_TARGET }}.im 
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.SSH_PRIVATE_KEY }}
+   
