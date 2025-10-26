@@ -59,18 +59,18 @@ jobs:
     permissions:
       contents: write
     env:
-      MANIFEST_URL: ${{ github.event.inputs.MANIFEST_URL }}
-      MANIFEST_BRANCH: ${{ github.event.inputs.MANIFEST_BRANCH }}
-      DEVICE_TREE_URL: ${{ github.event.inputs.DEVICE_TREE_URL }}
-      DEVICE_TREE_BRANCH: ${{ github.event.inputs.DEVICE_TREE_BRANCH }}
-      DEVICE_TREE_PATH: ${{ github.event.inputs.DEVICE_TREE_PATH }}
-      COMMON_TREE_URL: ${{ github.event.inputs.COMMON_TREE_URL }}
-      COMMON_TREE_BRANCH: ${{ github.event.inputs.DEVICE_TREE_BRANCH }}
-      COMMON_TREE_PATH: ${{ github.event.inputs.COMMON_TREE_PATH }}
-      DEVICE_NAME: ${{ github.event.inputs.DEVICE_NAME }}
-      MAKEFILE_NAME: ${{ github.event.inputs.MAKEFILE_NAME }}
-      BUILD_TARGET: ${{ github.event.inputs.BUILD_TARGET }}.img
-     
+      MANIFEST_URL:       "${{ github.event.inputs.MANIFEST_URL }}"
+      MANIFEST_BRANCH:    "${{ github.event.inputs.MANIFEST_BRANCH }}"
+      DEVICE_TREE_URL:    "${{ github.event.inputs.DEVICE_TREE_URL }}"
+      DEVICE_TREE_BRANCH: "${{ github.event.inputs.DEVICE_TREE_BRANCH }}"
+      DEVICE_TREE_PATH:   "${{ github.event.inputs.DEVICE_TREE_PATH }}"
+      COMMON_TREE_URL:    "${{ github.event.inputs.COMMON_TREE_URL }}"
+      COMMON_TREE_BRANCH: "${{ github.event.inputs.DEVICE_TREE_BRANCH }}"
+      COMMON_TREE_PATH:   "${{ github.event.inputs.COMMON_TREE_PATH }}"
+      DEVICE_NAME:        "${{ github.event.inputs.DEVICE_NAME }}"
+      MAKEFILE_NAME:      "${{ github.event.inputs.MAKEFILE_NAME }}"
+      BUILD_TARGET:       "${{ github.event.inputs.BUILD_TARGET }}"
+
     steps:
 
     - name: Check Build Tree
@@ -95,6 +95,7 @@ jobs:
         echo "Device Name:        ${{ env.DEVICE_NAME }}"
         echo "Makefile Name:      ${{ env.MAKEFILE_NAME }}"
         echo "Build Target:       ${{ env.BUILD_TARGET }}.img"
+        echo "Build Tree:         ${{ steps.buildtree.outputs.value }}
         echo "::endgroup::"
 
     # You might want to Checkout your repo first, but not mandatory
