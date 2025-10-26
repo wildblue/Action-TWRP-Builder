@@ -47,10 +47,6 @@ on: #[push, pull_request, workflow_dispatch]
         description: 'COMMON_TREE_URL'
         required: true
         default: 'https://github.com/exynos-republic/android_device_samsung_universal2100-common'
-      COMMON_TREE_BRANCH:
-        description: 'COMMON_TREE_BRANCH'
-        required: true
-        default: 'fourteen'
       COMMON_PATH:
         description: 'COMMON_PATH'
         required: true
@@ -96,7 +92,6 @@ jobs:
         echo "Device Tree Branch: ${{ github.event.inputs.DEVICE_TREE_BRANCH }}"
         echo "Device Path: ${{ github.event.inputs.DEVICE_PATH }}"
         echo "Common Tree URL: ${{ github.event.inputs.COMMON_TREE_URL }}"
-        echo "Common Tree Branch: ${{ github.event.inputs.COMMON_TREE_BRANCH }}"
         echo "Common Tree Path: "${{ github.event.inputs.COMMON_PATH }}"
         echo "Device Name: ${{ github.event.inputs.DEVICE_NAME }}"
         echo "Makefile Name: ${{ github.event.inputs.MAKEFILE_NAME }}"
